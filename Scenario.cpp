@@ -62,6 +62,10 @@ void Scenario::parseScenarioConfig(const Value& sc, bool setDefaults) {
 		y = 8000 * ((float)rand() / RAND_MAX) - 2000;
 	}
 
+    xconfig = x;
+    yconfig = y;
+    zconfig = z;
+
 	if (time.IsArray()) {
 		if (!time[0].IsNull()) hour = time[0].GetInt();
 		else if (setDefaults) hour = rand() % 24;
@@ -275,11 +279,11 @@ void Scenario::buildScenario() {
 	Hash vehicleHash;
 	float heading;
 
-    if (!stationaryScene) {
-        GAMEPLAY::SET_RANDOM_SEED(std::time(NULL));
-        while (!PATHFIND::_0xF7B79A50B905A30D(-8192.0f, 8192.0f, -8192.0f, 8192.0f)) WAIT(0);
-        PATHFIND::GET_CLOSEST_VEHICLE_NODE_WITH_HEADING(x, y, 0, &pos, &heading, 0, 0, 0);
-    }
+    //if (!stationaryScene) {
+    //    GAMEPLAY::SET_RANDOM_SEED(std::time(NULL));
+    //    while (!PATHFIND::_0xF7B79A50B905A30D(-8192.0f, 8192.0f, -8192.0f, 8192.0f)) WAIT(0);
+    //    PATHFIND::GET_CLOSEST_VEHICLE_NODE_WITH_HEADING(x, y, 0, &pos, &heading, 0, 0, 0);
+    //}
 
 	ENTITY::DELETE_ENTITY(&m_ownVehicle);
 	vehicleHash = GAMEPLAY::GET_HASH_KEY((char*)_vehicle);
@@ -296,8 +300,6 @@ void Scenario::buildScenario() {
         log(str);
         vehicles_created = false;
     }
-	m_ownVehicle = VEHICLE::CREATE_VEHICLE(vehicleHash, pos.x, pos.y, pos.z, heading, FALSE, FALSE);
-	VEHICLE::SET_VEHICLE_ON_GROUND_PROPERLY(m_ownVehicle);
 
 	while (!ENTITY::DOES_ENTITY_EXIST(ped)) {
 		ped = PLAYER::PLAYER_PED_ID();
@@ -305,8 +307,12 @@ void Scenario::buildScenario() {
 	}
 
 	player = PLAYER::PLAYER_ID();
-	PLAYER::START_PLAYER_TELEPORT(player, pos.x, pos.y, pos.z, heading, 0, 0, 0);
+    float headingplayer = ENTITY::GET_ENTITY_HEADING(player);
+	PLAYER::START_PLAYER_TELEPORT(player, xconfig, yconfig, zconfig, headingplayer, 0, 0, 0);
 	while (PLAYER::IS_PLAYER_TELEPORT_ACTIVE()) WAIT(0);
+
+    m_ownVehicle = VEHICLE::CREATE_VEHICLE(vehicleHash, xconfig, yconfig, zconfig, headingplayer, FALSE, FALSE);
+    VEHICLE::SET_VEHICLE_ON_GROUND_PROPERLY(m_ownVehicle);
 
 	PED::SET_PED_INTO_VEHICLE(ped, m_ownVehicle, -1);
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(vehicleHash);

@@ -36,6 +36,7 @@ private:
 	Vector3 dir;
 
 	float x, y, z;
+    float xconfig, yconfig, zconfig;
     float startHeading;
 	int hour, minute;
 	const char* _weather;
