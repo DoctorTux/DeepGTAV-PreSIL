@@ -49,11 +49,9 @@ void Scenario::parseScenarioConfig(const Value& sc, bool setDefaults) {
         else if (setDefaults) z = 0;
 
         if (!location[3].IsNull()) {
-            log("Location 2 is not null");
             startHeading = location[3].GetFloat();
         }
         else if (setDefaults) {
-            log("Location 3 is NULL");
             startHeading = 0;
         }
 	}
@@ -65,6 +63,7 @@ void Scenario::parseScenarioConfig(const Value& sc, bool setDefaults) {
     xconfig = x;
     yconfig = y;
     zconfig = z;
+    headingconfig = startHeading;
 
 	if (time.IsArray()) {
 		if (!time[0].IsNull()) hour = time[0].GetInt();
@@ -97,8 +96,15 @@ void Scenario::parseScenarioConfig(const Value& sc, bool setDefaults) {
 }
 
 void Scenario::parseDatasetConfig(const Value& dc, bool setDefaults) {
-	if (!dc["rate"].IsNull()) rate = dc["rate"].GetFloat();
-	else if (setDefaults) rate = _RATE_;
+    if (!dc["rate"].IsNull()) {
+        rate = dc["rate"].GetFloat();
+        rate_original = rate;
+        rate_stopped = rate / RATE_STOPPED_CHANGER;
+    }else if (setDefaults) {
+        rate = _RATE_;
+        rate_original = rate;
+        rate_stopped = rate / RATE_STOPPED_CHANGER;
+    }
 
     if (!dc["startIndex"].IsNull()) {
         instance_index = dc["startIndex"].GetInt();
@@ -307,11 +313,10 @@ void Scenario::buildScenario() {
 	}
 
 	player = PLAYER::PLAYER_ID();
-    float headingplayer = ENTITY::GET_ENTITY_HEADING(player);
-	PLAYER::START_PLAYER_TELEPORT(player, xconfig, yconfig, zconfig, headingplayer, 0, 0, 0);
+	PLAYER::START_PLAYER_TELEPORT(player, xconfig, yconfig, zconfig, headingconfig, 0, 0, 0);
 	while (PLAYER::IS_PLAYER_TELEPORT_ACTIVE()) WAIT(0);
 
-    m_ownVehicle = VEHICLE::CREATE_VEHICLE(vehicleHash, xconfig, yconfig, zconfig, headingplayer, FALSE, FALSE);
+    m_ownVehicle = VEHICLE::CREATE_VEHICLE(vehicleHash, xconfig, yconfig, zconfig, headingconfig, FALSE, FALSE);
     VEHICLE::SET_VEHICLE_ON_GROUND_PROPERLY(m_ownVehicle);
 
 	PED::SET_PED_INTO_VEHICLE(ped, m_ownVehicle, -1);
@@ -503,11 +508,13 @@ StringBuffer Scenario::generateMessage() {
         return buffer;
     }
 
-    if (m_positionScenario || OUTPUT_SELF_LOCATION) {
-        Vector3 currentPos;
-        Vector3 vehicleForwardVector, vehicleRightVector, vehicleUpVector;
+    Vector3 currentPos;
+    Vector3 vehicleForwardVector, vehicleRightVector, vehicleUpVector;
 
-        ENTITY::GET_ENTITY_MATRIX(m_ownVehicle, &vehicleForwardVector, &vehicleRightVector, &vehicleUpVector, &currentPos);
+    ENTITY::GET_ENTITY_MATRIX(m_ownVehicle, &vehicleForwardVector, &vehicleRightVector, &vehicleUpVector, &currentPos);
+
+    if (m_positionScenario || OUTPUT_SELF_LOCATION) {
+
         float heading = GAMEPLAY::GET_HEADING_FROM_VECTOR_2D(vehicleForwardVector.x, vehicleForwardVector.y);
 
         std::string baseFolder = std::string(getenv("DEEPGTAV_EXPORT_DIR")) + "\\";
@@ -528,6 +535,18 @@ StringBuffer Scenario::generateMessage() {
     log("About to pause game");
     GAMEPLAY::SET_GAME_PAUSED(true);
     GAMEPLAY::SET_TIME_SCALE(0.0f);
+
+    // CHANGE FRAME RATE IF VEHICLE STOPPED
+    if ((x_previous == currentPos.x) || (y_previous == currentPos.y) || (z_previous == currentPos.z)) {
+        rate = rate_stopped;
+    }else {
+        if (rate != rate_original) {
+            rate = rate_original;
+        }
+        x_previous = currentPos.x;
+        y_previous = currentPos.y;
+        z_previous = currentPos.z;
+    }
 
     setRenderingCam(m_ownVehicle, CAM_OFFSET_UP, CAM_OFFSET_FORWARD);
 

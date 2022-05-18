@@ -6,3 +6,4 @@ bin/Release/paths.xml
 /.vs/DeepGTAV/v15/.suo
 /.vs/DeepGTAV/v15/Browse.VC.db
 /.vs/
+ObjectDet/*

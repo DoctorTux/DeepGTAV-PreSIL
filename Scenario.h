@@ -21,6 +21,7 @@
 using namespace rapidjson;
 
 //#define DEBUG 1
+#define RATE_STOPPED_CHANGER 10;
 
 class Scenario {
 private:
@@ -36,7 +37,8 @@ private:
 	Vector3 dir;
 
 	float x, y, z;
-    float xconfig, yconfig, zconfig;
+    float xconfig, yconfig, zconfig, headingconfig;
+    float x_previous, y_previous, z_previous;
     float startHeading;
 	int hour, minute;
 	const char* _weather;
@@ -91,6 +93,8 @@ private:
 
 public:
 	float rate;
+    float rate_original;
+    float rate_stopped;
 
 	void start(const Value& sc, const Value& dc);
 	void stop();
