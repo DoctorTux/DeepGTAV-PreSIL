@@ -547,6 +547,7 @@ StringBuffer Scenario::generateMessage() {
         y_previous = currentPos.y;
         z_previous = currentPos.z;
     }
+    //rate = rate_original;
 
     setRenderingCam(m_ownVehicle, CAM_OFFSET_UP, CAM_OFFSET_FORWARD);
 

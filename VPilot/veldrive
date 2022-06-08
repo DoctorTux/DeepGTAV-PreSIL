@@ -28,6 +28,7 @@ if __name__ == '__main__':
     #Dataset config values
     width_val = 1920
     height_val = 1080
+    #rate_val=0.025
     rate_val=0.2
     collectVehicles_val = True
     collectPeds_val = True
@@ -41,7 +42,7 @@ if __name__ == '__main__':
     location_val=False
     
     #Change to need
-    startIndex_val = 0
+    startIndex_val = 2880
     
     
     
@@ -52,20 +53,30 @@ if __name__ == '__main__':
     
 
     
-    # We set the scenario to be in manual driving, and everything else random (time, weather and location). 
-    # See deepgtav/messages.py to see what options are supported
-    #scenario = Scenario(drivingMode=-1) #manual driving
-    
+
     #driveMode = 786603 #Normal?
     #drivingMode=[-1,15.0]
     #driveMode = 447 # Crashed on semaphore
-           
+    
+    # PREVIOUS RESPAWNS    
     #restartLocation=[-1336.263,-3044.306,13.43] #airport - Good for ground
-    restartLocation=[925.765,-42.561,78.250] #near city on parking lot
+    #restartLocation=[925.765,-42.561,78.250, 220.0] #near city on parking lot
     #restartLocation=[-850.619,314.459,85.562] #downhill
     #restartLocation=[868.854, -557.53, 57.007] #Good starting place
     #restartLocation=[1033.18, 371.865, 89.736] #Highway
     #restartLocation=[-500.69, 126.351, 63.1683] #near city center, quiet 
+    
+    # UPDATED RESPAWNS
+    #restartLocation=[-1338.340,-3042.984,13.944, 62.611] #airport - Good for ground
+    #restartLocation=[904.758, 9.25794, 78.4338, 63.8005] #near city on parking lot
+    #restartLocation=[-847.994,306.274,86.102,215.920] #downhill
+    #restartLocation=[905.313, -514.918, 57.864, 292.736] #Good starting place
+    #restartLocation=[1033.122, 371.777, 90.251, 131.493] #Highway
+    #restartLocation=[134.469, 6503.23, 31.1451, 312.05] #Trucks
+    #restartLocation=[-902.083, 1707.73, 184.744, 188.869] #Isolated vehicles
+    
+    
+    restartLocation=[-792.334, -119.904, 37.4301, 114.999] #latest location
 
     scenario_location=[]
     scenario = Scenario(drivingMode=[-1,0],location=restartLocation)
@@ -81,14 +92,7 @@ if __name__ == '__main__':
         try:
             # We receive a message as a Python dictionary
             message = client.recvMessage()  
-            
-                           
-            # The frame is a numpy array that can we pass through a CNN for example     
-            # image = frame2numpy(message['frame'], (320,160))
-            #image = frame2numpy(message['frame'], (1920,1080))
-            #commands = model.run(image)
-            # We send the commands predicted by the agent back to DeepGTAV to control the vehicle
-            #client.sendMessage(Commands(commands[0], commands[1], commands[2]))
+
         except KeyboardInterrupt:
             break
             
