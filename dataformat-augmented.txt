@@ -47,6 +47,9 @@ The next 6 columns are the augmented data and represent:
    1    pitch        pitch angle (rad),   0 = level, positive = front down,        range: -pi/2 .. +pi/2   (in terms of cam coordinates)
    1    model        String defining the object model
    1    v_ped_is_in  entity_id of vehicle if the object is a pedestrian in a vehicle, otherwise 0
-   3    object_vel   velocity vector of the object (m/s) (Vx,Vy,Vz)
-   3    player_vel   velocity vector of the player (m/s) (Vx,Vy,Vz)
-
+   3    object_vel   velocity vector of the object (GTA axis) (m/s) (Vx,Vy,Vz)
+   3    player_vel   velocity vector of the player (GTA axis) (m/s) (Vx,Vy,Vz)
+   3    obj_coords   Object coordinates vector (GTA axis)     (m)   (Rx,Ry,Rz)
+   3    ply_coords   Player coordinates vector (GTA axis)     (m)   (Rx,Ry,Rz)
+   3    obj_vel_cam  Object velocity vector (axis transformation)     (m/s)   (Vx,Vy,Vz)
+   3    ply_vel_cam  Player velocity vector (axis transformation)     (m/s)   (Vx,Vy,Vz)
