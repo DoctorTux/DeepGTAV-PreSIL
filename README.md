@@ -22,6 +22,56 @@ Instance Level Object Segmentation
 Stencil Buffer
 <img src="https://github.com/bradenhurl/DeepGTAV-PreSIL/blob/master/samples/342-stencil.png" alt="Stencil Buffer" width="900px">
 
+
+## Synthetic automotive LiDAR dataset with radial velocity additional feature - (x,y,z,v)
+The synthetic dataset generated is accessible in https://doi.org/10.5281/zenodo.7184990. It is comprised by 15000 frames with KITTI-like format, with the following point clouds:
+- Point cloud 1: (x,y,z, (Bool)Is_Object): In this point cloud, the best performance of the Deep Learning model is expected as ground truth information is provided as the additional feature of each point.
+  - Point cloud 1A: (x,y,z, (Bool)Is_Car): the additional feature of each point that belongs to an object of the ’Car’ type has a Boolean 1.0 value; contrariwise, the 0.0 value was used. File: velodyne_1A_isCar;
+  - Point cloud 1B: (x,y,z, (Bool)Is_Ped): the additional feature of each point that belongs to an object of the ’Pedestrian’ type has a Boolean 1.0 value; contrariwise, the value 0.0 was used.  File: velodyne_1A_isPed.
+- Point cloud 2: (x,y,z, (Float)Radial_Velocity): this point cloud has the relative radial velocity as an additional feature for each point. File: velodyne_2_radial_velocity;
+- Point cloud 3: (x,y,z,(Float)Car_Absolute_Speed): in this point cloud, every point of a ’Car’ type object
+has the absolute speed of the object as the additional feature. File: velodyne_3_car_abs_speed;
+- Point cloud 4: (x,y,z,(Bool)Car_Is_Moving): the additional feature of a ’Car’ type object is a Boolean value that is set to 1.0 if the vehicle is moving, contrariwise is set to 0.0 for other object categories or if the vehicle is static. File: velodyne_4_car_is_moving;
+- Point cloud 5: (x,y,z,0): no additional feature information. If desired, requires post-processing to convert to (x,y,z) or changing the toolbox point cloud configuration to not consider the additional feature. File: velodyne_5_xyz;
+
+
+
+## Modifications to the default PreSIL dataset generation source code
+Sensor specifications:
+1. Point cloud range changed to 69.12 m (default distance at OpenPCDet toolbox for annotations, PC is not used past that distance). File: Constants.h;
+2. Point cloud annotations changed to 69.12 m (default distance at OpenPCDet toolbox for KITTI like annotations). File: Constants.h;
+3. Frame rate changed to 0.2 Hz for more scenario diversity. File: VPilot/veldrive.
+
+KITTI annotations:
+1. The PreSIL occlusion value is converted to a KITTI level. Since no threshold is available by KITTI, a visual inspection was made.
+  1.1 [0.0,0.2[ are assigned level 0 occlusion -> fully visible;
+  1.2 [0.2,0.6[ are assigned level 1 occlusion -> partly occluded;
+  1.3 [0.6,1] are assigned level 2 occlusion -> largely occluded.
+  File: ObjectDetection.cpp.
+  
+2. To improve PreSIL object type consistency, the vehicle model to object type was reviewed with object reclassified according to their dimensions.
+  File: ObjectDet/vehicle_labels.csv.
+
+## Added features to PreSIL dataset generation source code
+1. The following 6 point clouds were included to the dataset generation source code:
+  - Point cloud 1A: (x,y,z, (Bool)Is_Car): the additional feature of each point that belongs to an object of the ’Car’ type has a Boolean 1.0 value; contrariwise, the 0.0 value was used. Output file name: velodyne_1A_isCar;
+  
+  
+   - Point cloud 1B: (x,y,z, (Bool)Is_Ped): the additional feature of each point that belongs to an object of the ’Pedestrian’ type has a Boolean 1.0 value; contrariwise, the value 0.0 was used.  Output file name: velodyne_1A_isPed.
+
+   - Point cloud 2: (x,y,z, (Float)Radial_Velocity): this point cloud has the relative radial velocity as an additional feature for each point. File: velodyne_2_radial_velocity;
+    
+   - Point cloud 3: (x,y,z,(Float)Car_Absolute_Speed): in this point cloud, every point of a ’Car’ type object
+has the absolute speed of the object as the additional feature. Output file name: velodyne_3_car_abs_speed;
+
+   - Point cloud 4: (x,y,z,(Bool)Car_Is_Moving): the additional feature of a ’Car’ type object is a Boolean value that is set to 1.0 if the vehicle is moving, contrariwise is set to 0.0 for other object categories or if the vehicle is static. Output file name: velodyne_4_car_is_moving;
+  
+   - Point cloud 5: (x,y,z,0): no additional feature information. If desired, requires post-processing to convert to (x,y,z) or changing the toolbox point cloud configuration to not consider the additional feature. Output file name: velodyne_5_xyz;
+
+File with the point clouds data acquisition: ObjectDet/LiDAR.cpp.
+
+2. Frame rate is changed if the vehicle is stopped to improve scenario diversity. File: Scenario.cpp.
+
 ## Installation
 1. Make sure GTAV is on version 1.0.1180.2 or below
 2. Copy-paste the contents of *bin/Release* under your GTAV installation directory
