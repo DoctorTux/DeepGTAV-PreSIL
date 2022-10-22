@@ -42,7 +42,7 @@ if __name__ == '__main__':
     location_val=False
     
     #Change to need
-    startIndex_val = 2880
+    startIndex_val = 0
     
     
     
@@ -76,8 +76,9 @@ if __name__ == '__main__':
     #restartLocation=[-902.083, 1707.73, 184.744, 188.869] #Isolated vehicles
     
     
-    restartLocation=[-792.334, -119.904, 37.4301, 114.999] #latest location
-
+    
+    restartLocation=[905.313, -514.918, 57.864, 292.736] #latest location
+    #restartLocation=[947.831, 258.369, 80.4863, 147.973] #latest location
     scenario_location=[]
     scenario = Scenario(drivingMode=[-1,0],location=restartLocation)
     
