@@ -69,12 +69,12 @@ KITTI annotations:
   <img src="https://github.com/leandroalexandrino1995/DeepGTAV-PreSIL/blob/master/samples/000981.png" alt="Frame from the dataset" width="900px">
   <img src="https://github.com/leandroalexandrino1995/DeepGTAV-PreSIL/blob/master/samples/radial_velocityPC.png" alt="Radial velocity additional feature" width="900px">
     
-   - Point cloud 3: (x,y,z,(Float)Car_Absolute_Speed): in this point cloud, every point has the absolute speed of the object as the additional feature. Output file name: velodyne_3_absolute_speed;
+   - Point cloud 3: (x,y,z,(Float)Abs_Speed): in this point cloud, every point has the absolute speed of the object as the additional feature. Output file name: velodyne_3_absolute_speed;
 
   <img src="https://github.com/leandroalexandrino1995/DeepGTAV-PreSIL/blob/master/samples/000981.png" alt="Frame from the dataset" width="900px">
   <img src="https://github.com/leandroalexandrino1995/DeepGTAV-PreSIL/blob/master/samples/abs_speedPC.png" alt="Car absolute speed additional feature" width="900px">
 
-   - Point cloud 4: (x,y,z,(Bool)Car_Is_Moving): the additional feature of an object is a Boolean value that is set to 1.0 if the object is moving, contrariwise is set to 0.0. Output file name: velodyne_4__is_moving;
+   - Point cloud 4: (x,y,z,(Bool)Is_Moving): the additional feature of an object is a Boolean value that is set to 1.0 if the object is moving, contrariwise is set to 0.0. Output file name: velodyne_4__is_moving;
   
   <img src="https://github.com/leandroalexandrino1995/DeepGTAV-PreSIL/blob/master/samples/000981.png" alt="Frame from the dataset" width="900px">
   <img src="https://github.com/leandroalexandrino1995/DeepGTAV-PreSIL/blob/master/samples/isMovingPC.png" alt="Car is moving additional feature" width="900px">
