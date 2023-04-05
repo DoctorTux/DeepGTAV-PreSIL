@@ -21,12 +21,12 @@ def ensureDirExists(filename):
             if exc.errno != errno.EEXIST:
                 raise
 
-width = 1920
-height = 1080
+width = 800
+height = 600
 index = 0 #Use startIndex to change index to start on
 startIndex = 0
 
-oldExport = False
+oldExport = True
 recordScenario = False
 positionScenario = False
 tracking = False
@@ -43,7 +43,7 @@ if tracking:
     collectVehicles = True
     collectPeds = True
     collectOffscreen = False
-    captureRate = 25
+    captureRate = 10
     driveMode = 537657771 #stop at lights; use blinkers; avoid highways
 else:
     base_folder = base_folder + "object\\"
@@ -160,11 +160,11 @@ if __name__ == '__main__':
                         stationaryScene=False, collectTracking=tracking, vehiclesToCreate=vehicles, pedsToCreate=peds, startIndex=startIndex, recordScenario=recordScenario, positionScenario=positionScenario)
 
         # Pitch view
-        # startLocation = [-697.306, 995.426, 239, 55.1029]
+        startLocation = [-697.306, 995.426, 239, 55.1029]
         # startLocation = [-539.831, 665.427, 142.673, 278.001]
         # startLocation = [-554.445, 134.722, 62.6856, 313.719]
         # startLocation = [-564.368, 26.8335, 44, 295.413]
-        scenario = Scenario(drivingMode=[driveMode,15.0])#, location=startLocation) # Driving style is set to normal, with a speed of 15.0 mph. All other scenario options are random.
+        scenario = Scenario(drivingMode=[driveMode,15.0], location=startLocation) # Driving style is set to normal, with a speed of 15.0 mph. All other scenario options are random.
     # Send the Start request to DeepGTAV.
     client.sendMessage(Start(dataset=dataset,scenario=scenario))
 
