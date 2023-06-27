@@ -486,7 +486,7 @@ void Scenario::stop() {
 	if (!running) return;
 	running = false;
 	CAM::DESTROY_ALL_CAMS(TRUE);
-	CAM::RENDER_SCRIPT_CAMS(FALSE, TRUE, 500, FALSE, FALSE);
+	CAM::RENDER_SCRIPT_CAMS(FALSE, TRUE, 1200, FALSE, FALSE);
 	AI::CLEAR_PED_TASKS(ped);
 	setCommands(0.0, 0.0, 0.0);
 }
@@ -537,7 +537,7 @@ StringBuffer Scenario::generateMessage() {
     GAMEPLAY::SET_TIME_SCALE(0.0f);
 
     // CHANGE FRAME RATE IF VEHICLE STOPPED
-    if ((x_previous == currentPos.x) || (y_previous == currentPos.y) || (z_previous == currentPos.z)) {
+   /* if ((x_previous == currentPos.x) || (y_previous == currentPos.y) || (z_previous == currentPos.z)) {
         rate = rate_stopped;
     }else {
         if (rate != rate_original) {
@@ -546,8 +546,8 @@ StringBuffer Scenario::generateMessage() {
         x_previous = currentPos.x;
         y_previous = currentPos.y;
         z_previous = currentPos.z;
-    }
-    //rate = rate_original;
+    }*/
+    rate = rate_original;
 
     setRenderingCam(m_ownVehicle, CAM_OFFSET_UP, CAM_OFFSET_FORWARD);
 

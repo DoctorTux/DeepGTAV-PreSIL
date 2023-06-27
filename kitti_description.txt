@@ -1,0 +1,67 @@
+Training
+d 0000	(m) roundabout exit with cyclist and car in front	153
+d 0001	(m) residential area with a lot of parked cars, ending with crossroad	446
+d 0002	(m) arterial road into waiting in a crossroad	232
+d 0003	(m) arterial road with car overtaking us	143
+d 0004	(m) crossroad into arterial road, stop and start in a crosswalk	313
+d 0005	(m) arterial road with incoming out outgoing traffic	242
+d 0006	(m) wait in red light at crossroad and turn left	269
+c 0007	(m) residential area into arterial road	799 (711)
+d 0008	(m) interstate road	389
+c 0009	(m) residential area into arterial road behind truck	802 (630)
+d 0010	(m) urban avenue with metro passing beside it	293
+d 0011   (m) urban avenue with 2 lanes in each side and a lot of parked cars	372
+d 0012	(m) quiet crossroad with cyclist and cars, some parked	77 # highway 283
+d 0013	(m) european city center	339 + 88
+d 0014	(m) wait in crossroad near park and then turn left into 2-lane road with parked cars	105
+d 0015	(m) city avenue and stop at crossroad with passing cyclits and pedestrians	375 (547)
+*0016	(s) similar to Testing 0019	208
+*0017	(s) pedestrian zone in city	144
+d 0018	(m) busy arterial road with a colapsed lane	338
+c 0019	(m) busy pedestrian zone in city	1058 (747)
+c 0020	(m) busy highway followed to exit into city	836 (630)
+
+Testing
+d 0000	(m) one-way narrow street with many parked cars	464
+d 0001	(s) crossroad with red light	146
+d 0002	(m) arterial road 1 to 2 lane, with an extra road to turn left	242
+d 0003	(m) narrow two-way road with sidewalk	256
+d 0004	(m) country one-lane road with car in front	420
+c 0005	(m) side road to highway transiction with more highway driving	808 (758)
+d 0006	(m) highway	113
+d 0007	(m) side road to arterial road	214
+d 0008	(m) small roundabout entry and exit	164 (0010 +472 638)
+d 0009	(m) arterial road to another right to another left	348
+c 0010	(m) waiting in busy 4-way crossroad and then move forward to one-lane road, move for a while and then turn right behind cyclist to forest road	1175 (701)
+c 0011	(m) busy urban setting with many parked cars to narrower streets until reacking garage	773 (725)
+d 0012	(m) light urban settign ending stopped in a crossroad	693
+d 0013	(m) 4-way arterial road to crossroad with cars in front	151 (400)
+c 0014	(m) continuation of 0013, turning left in crossroad into 2-lane road into 1-way 2-lane road to the left	849 (609)
+d 0015	(m) driving near park, waiting in junction and then moving left	700
+d 0016	(m) urban setting behind truck at the start, ending in a university-like setting	509
+d 0017	(s) 4-way crossroad near park	304
+d 0018	(m) urban setting with bus in front	179
+*0019	(s) crossroad with pedestrians and cyclists passing	403
+*0020	(s) similar to 0019	172
+*0021	(s) similar to 0019	202
+*0022	(s) similar to 0019 but with more traffic passing by and people crossing	435
+*0023	(s) similar to 0022	429
+*0024	(s) similar to 0019	315
+*0025	(s) similar to 0019	175
+*0026	(m) narrow road in pedestrain zone	169
+d 0027	(m) passing near full bus stop while behind car, finishing in a crossroad	84
+*0028	(m) similar to 0019	174
+
+Stats
+Training
+with cars: 6828 (20)
+without cars: 352 (9)
+
+Testing
+with cars: 7892 (19)
+without cars: 2474 (2)
+
+Combined
+with cars: 14720
+without cars: 2826
+total: 17546

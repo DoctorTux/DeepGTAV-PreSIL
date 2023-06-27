@@ -3,6 +3,7 @@
 
 from deepgtav.messages import Start, Stop, Scenario, Dataset, Commands, frame2numpy
 from deepgtav.client import Client
+from file_manage import rename_dir, clip_seq
 
 import argparse
 import time
@@ -28,14 +29,14 @@ if __name__ == '__main__':
     
     
     #Dataset config values
-    width_val = 800
-    height_val = 600
+    width_val = 1920
+    height_val = 1080
     #rate_val=0.025
     rate_val=10
     collectVehicles_val = True
     collectPeds_val = True
     collectOffscreen_val = False
-    tracking_val = False
+    tracking_val = True
     vehicles = []
     peds = []
     lidarParam_val = 7
@@ -44,9 +45,9 @@ if __name__ == '__main__':
     location_val=False
     
     #Change to need
-    startIndex_val = 0
-    
-    
+    seq=input("Sequence? ")
+    num_frames=int(input("Frames? "))
+    startIndex_val = -int(input("Clip? ")) 
     
     dataset = Dataset(rate=rate_val,frame=[width_val,height_val], throttle=True, brake=True, steering=True, vehicles=collectVehicles_val, peds=collectPeds_val,
                         direction=None, speed=True, yawRate=True, location=location_val, time=True, offscreen=collectOffscreen_val,showBoxes=False, pointclouds=True,
@@ -56,17 +57,17 @@ if __name__ == '__main__':
 
     
 
-    #driveMode = 786603 #Normal?
+    driveMode = 786603 #Normal?
     #drivingMode=[-1,15.0]
     #driveMode = 447 # Crashed on semaphore
     
     # PREVIOUS RESPAWNS    
-    #restartLocation=[-1336.263,-3044.306,13.43] #airport - Good for ground
+    restartLocation=[-1336.263,-3044.306,13.43] #airport - Good for ground
     #restartLocation=[925.765,-42.561,78.250, 220.0] #near city on parking lot
     #restartLocation=[-850.619,314.459,85.562] #downhill
     #restartLocation=[868.854, -557.53, 57.007] #Good starting place
     #restartLocation=[1033.18, 371.865, 89.736] #Highway
-    #restartLocation=[-500.69, 126.351, 63.1683] #near city center, quiet 
+   
     
     # UPDATED RESPAWNS
     #restartLocation=[-1338.340,-3042.984,13.944, 62.611] #airport - Good for ground
@@ -76,13 +77,63 @@ if __name__ == '__main__':
     #restartLocation=[1033.122, 371.777, 90.251, 131.493] #Highway
     #restartLocation=[134.469, 6503.23, 31.1451, 312.05] #Trucks
     #restartLocation=[-902.083, 1707.73, 184.744, 188.869] #Isolated vehicles
+    #restartLocation=[9.244, 552.645, 175.952, 295.582]
+
+    #MY LOCATIONS
+    #Training
+    #restartLocation=[-728.987,805.909,213.313,243.519] #residential area tr0000
+    #restartLocation=[-918.795,269.092,69.695,15.481] #residential area near park with parked cars tr0001
+    #restartLocation=[-823.874,-75.052,37.463,116.372] #arterial road near city with stoplights tr0002
+    #restartLocation=[1289.671,1543.960,95.889,183.235] #arterial road tr 0003
+    #restartLocation=[-1194.899,-871.160,13.53,301.100] #urban turn right on hill tr 0004
+    #restartLocation=[-1017.239,-236.751,37.739,114.761] #near city center, turn right tr0005
+    #restartLocation=[-971.476,-1222.335,4.937,120.175] #urban setting tr0006
+    #restartLocation=[-1519.539,442.149,109.306,288.870] #residential area tr0007
+    #restartLocation=[-2477.293,-202.948,17.420,62.479] #interstate road tr 0008
+    #restartLocation=[-115.017,-1167.017,25.522,175.547] #urban area into arterial road tr0009
+    #restartLocation=[531.745,-1482.607,28.907,338.278] #urban near train tracks tr0010
+    #restartLocation=[325.429,1014.050,210.185,353.941]  #Arterial uphill with parked cars and collapsing way tr0011
+    #restartLocation=[1645.290,1235.829,84.870,165.385] #Highway tr0012
+    #restartLocation=[-854.502,478.639,87.251,11.291] #residential zone tr 0013
+    #restartLocation=[-1469.616,59.087,52.674,98.117] #near park tr 0014
+    #restartLocation=[165.957,-1751.328,28.730,51.040] #City avenue tr 0015
+    #restartLocation=[-1155.774,263.445,66.452,108.654] #Arterial road tr 0018
+    #restartLocation=[515.421,-1428.376,29.012,86.498] #Urban setting tr0019
+    #restartLocation=[2366.487,1020.315,80.006,226.571] #busy highway tr0020
     
     
+
+    #Testing
+    restartLocation=[-964.311,-1497.198,4.541,30.373] #narrow street parked cars ts 0000
+    #restartLocation=[-1584.063,-217.899,54.410,332.961] #crossroad ts 0001
+    #restartLocation=[-1402.077,-94.965,52.142,186.160] #1-way to 2-way ts 0002
+    #restartLocation=[925.218,-2108.142,29.950,176.668] #narrow road with sidewalk ts 0003
+    #restartLocation=[3415.823,4888.560,34.874,47.355] #country road ts 0004
+    #restartLocation=[1031.259,480.149,95.323,229.555] #highway ts 0005
+    #restartLocation=[1250.886,-2126.044,46.119,200.280] #highway ts 0006
+    #restartLocation=[654.596,339.255,109.549,121.230] #side road to arterial 0007
+    #restartLocation=[-1952.672,517.669,108.874,248.953] #residential area ts 0008
+    #restartLocation=[-1773.500,-324.872,44.406,51.656] #arterial roads ts 0009
+    #restartLocation=[-154.108,1035.775,230.713,159.356] #forest road ts 0010
+    #restartLocation=[-241.478,-1597.150,33.234,1.109] #narrow street to heavy urban setting ts 0011
+    #restartLocation=[-508.005,-382.251,34.633,263.561] #downtown ts 0012
+    #restartLocation=[-646.594,-978.076,20.711,176.083] #4-way street ts 0013
+    #restartLocation=[-656.929,-1256.660,10.039,38.835] #4-way street ts 0014
+    #restartLocation=[-1925.548,-272.862,40.823,160.123] #driving near area with a lot of trees and then going to main road ts 0015
+    #restartLocation=[-1319.899,271.442,62.858,140.480] #start at hotel ts 0016
+    #restartLocation=[-977.705,20.920,48.963,215.974] #4-way crossroad ts 0017
+    #restartLocation=[235.152,-212.087,53.704,69.344] #urban ts 0018
+    #restartLocation=[-424.440,11.296,45.880,87.049] #bus stop ts 0027
+
+
+    #restartLocation=[819.822,-1427.516,26.835,89.702]  #(s) 4-way crossroad
+    #restartLocation=[230.123,-1424.519,28.889,61.362] #force to go right in crossroad
     
-    restartLocation=[905.313, -514.918, 57.864, 292.736] #latest location
+    
+    #restartLocation=[905.313, -514.918, 57.864, 292.736] #latest location
     #restartLocation=[947.831, 258.369, 80.4863, 147.973] #latest location
-    scenario_location=[]
-    scenario = Scenario(drivingMode=[-1,0],location=restartLocation)
+    #scenario_location=[]
+    scenario = Scenario(drivingMode=[driveMode,15.0],location=restartLocation)
     
     # Send the Start request to DeepGTAV. Dataset is set as default, we only receive frames at 10Hz (320, 160)
     client.sendMessage(Start(dataset=dataset,scenario=scenario))
@@ -91,16 +142,23 @@ if __name__ == '__main__':
 
     # Start listening for messages coming from DeepGTAV. We do it for 80 hours
     stoptime = time.time() + 80*3600
-    while time.time() < stoptime:
+    num_frames=num_frames-startIndex_val
+    for i in range(num_frames):
         try:
-            print("wait to receive...")
+            #print("wait to receive...")
             # We receive a message as a Python dictionary
             message = client.recvMessage()  
-            print("received")
+            print("Received frame "+str(i))
 
         except KeyboardInterrupt:
             break
             
     # We tell DeepGTAV to stop
-    #client.sendMessage(Stop())
+    client.sendMessage(Stop())
     client.close()
+
+    # DeepGTA Sequences are always created with name 0000, so this function changes its name to the sequence number (ex: 0005)
+    #rename_dir(seq)
+
+    # At the start of the sequence, the cars has a strange behaviour, so some frames are clipped from the final result
+    clip_seq(seq)
